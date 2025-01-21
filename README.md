@@ -58,7 +58,8 @@ project-name/
 ---
 
 ## Contributors
-* My name is Eric, and i'm excited to see what we learn from this.
+- My name is Eric, and i'm excited to see what we learn from this.
+- My name is Andre and I'm hoping this works
 
 ---
 

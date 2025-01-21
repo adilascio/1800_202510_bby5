@@ -61,7 +61,7 @@ project-name/
 - My name is Eric, and i'm excited to see what we learn from this.
 - My name is Andre and I'm hoping this works
 - My name is Asher, and I'm interested to see where this goes.
-- This is to make a conflict
+- This is going to make a conflict error.
 ---
 
 ## Acknowledgments

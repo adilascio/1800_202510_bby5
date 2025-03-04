@@ -1,0 +1,15 @@
+#canvas {
+    object-position: center;
+    background-repeat:no-repeat;
+    background-image: linear-gradient(to bottom right, cyan, green);
+    background-size: cover;
+    color: white;
+}
+#features {
+    
+    object-position: center;
+    justify-content: center;
+}
+.card {
+    margin: 10%;
+}

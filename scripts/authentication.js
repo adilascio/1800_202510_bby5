@@ -4,7 +4,7 @@ import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, si
 
 // Firebase configuration
 const firebaseConfig = {
-    apiKey: "AIzaSyClqsSTYdjvWkReamO0GPJrD6m_d5zY9UI",
+    apiKey: "AIzaSyClqsSTYdjvWkReamO0GPJrD6m_d5zY9UI", 
     authDomain: "gympal-8419a.firebaseapp.com",
     projectId: "gympal-8419a",
     storageBucket: "gympal-8419a.firebasestorage.app",
@@ -25,14 +25,13 @@ document.addEventListener("DOMContentLoaded", function() {
         // Get email and password values
         let email = document.getElementById("floatingInput").value;
         let password = document.getElementById("floatingPassword").value;
-
         signInWithEmailAndPassword(auth, email, password) 
             .then((userCredential) => {
                 console.log("User logged in:", userCredential.user);
                 window.location.href = "./main.html"; // Redirect to main page
             })
             .catch((error) => {
-
+                console.error("Login failed:", error.code, error.message);
             });
     });
 });

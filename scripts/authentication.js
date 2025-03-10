@@ -1,7 +1,7 @@
 // Firebase SDK imports
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
-import { getFirestore } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js"; // ✅ Import Firestore
+import { getFirestore } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
 
 // Firebase configuration
 const firebaseConfig = {
@@ -17,7 +17,7 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-const db = getFirestore(app); // ✅ Initialize Firestore
+const db = getFirestore(app);
 
 // Wait for DOM to load before adding event listeners
 document.addEventListener("DOMContentLoaded", function() {
@@ -38,5 +38,5 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 // Export Firestore database
-export { auth, db }; // ✅ Now 'db' is properly exported
+export { auth, db }; 
 

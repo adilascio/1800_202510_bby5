@@ -19,5 +19,24 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app); // ✅ Initialize Firestore
 
+// Wait for DOM to load before adding event listeners
+document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById("login-form").addEventListener("submit", function(event) {
+        event.preventDefault(); // Prevent form from reloading the page
+
+        // Get email and password values
+        let email = document.getElementById("floatingInput").value;
+        let password = document.getElementById("floatingPassword").value;
+        signInWithEmailAndPassword(auth, email, password) 
+            .then((userCredential) => {
+                console.log("User logged in:", userCredential.user);
+                window.location.href = "./main.html"; // Redirect to main page
+            })
+            .catch((error) => {
+                console.error("Login failed:", error.code, error.message);
+            });
+    });
+});
 // Export Firestore database
 export { auth, db }; // ✅ Now 'db' is properly exported
+

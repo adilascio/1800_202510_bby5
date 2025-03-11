@@ -34,6 +34,11 @@ document.addEventListener("DOMContentLoaded", function() {
             })
             .catch((error) => {
                 console.error("Login failed:", error.code, error.message);
+
+                if (error.code === "auth/user-not-found" || error.code === "auth/password-not-found" || error.code === "auth/invalid-credential") {
+                    console.log("Login information, redirecting to createaccount.");
+                    window.location.href = "./createAccount.html";
+                }
             });
     });
 });

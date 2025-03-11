@@ -13,3 +13,26 @@
 .card {
     margin: 10%;
 }
+.Event {
+    margin: 0 !important;
+    margin-top: 10pt !important;
+    margin-bottom: 10pt !important;
+    box-shadow: 5pt 6pt 3pt 10pt #edede4 !important;
+}
+
+.Leaderboard {
+    margin: 0 !important;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 10pt;
+    margin-top: 10pt;
+    margin-bottom: 10pt;
+    border-style: ridge;
+    border-width: 5pt;
+    
+    
+}
+
+.table table-striped table-hover {
+  
+}

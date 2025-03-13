@@ -20,19 +20,19 @@ function writeExercises() {
 
     exercisesRef.add({
         name: "Chest Press",
-        Image: "https://www.verywellfit.com/thmb/7jC7lJw0v3x4VQ6z7uTmZ3X4zX8=/1500x1000/filters:fill(FFDB5D,1)/chest-press-2500-56a6b4c83df78cf7728fbf9e.jpg",
+        Image: "chest.jpg",
     })
 
     var exercisesRef = db.collection("exercises");
     exercisesRef.add({
         name: "Squats",
-        Image: "https://www.verywellfit.com/thmb/3n6eYv7J6e5m3zFZv5K6Q6zB1Kw=/1500x1000/filters:fill(FFDB5D,1)/squats-2500-56a6b4c83df78cf7728fbf9d.jpg",
+        Image: "squat.jpg",
     })
 
     var exercisesRef = db.collection("exercises");
     exercisesRef.add({
         name: "Deadlifts",
-        Image: "https://www.verywellfit.com/thmb/0q3m3Q6ZB7Z8w6Dy9qyZ8d7Z8Z4=/1500x1000/filters:fill(FFDB5D,1)/deadlift-2500-56a6b4c83df78cf7728fbf9c.jpg",
+        Image: "deadlift.jpg",
     })
 }
 
@@ -72,7 +72,7 @@ function getExercisesName(id) {
     db.collection("exercises")
     .doc(id)
     .get()
-    .then((thisExercise) => {
+    .then((thisExercises) => {
         var exercisesName = thisExercises.data().name;
         document.getElementById("exercisesName").innerHTML = exercisesName;
     })
@@ -80,14 +80,14 @@ function getExercisesName(id) {
 
 function populateSession() {
     console.log("Populating session...");
-    let exercisesCardTemplate = document.getElementById("exercisesCardTemplate");
+    let exerciseCardTemplate = document.getElementById("exercisesCardTemplate");
     let exercisesCardGroup = document.getElementById("exercisesCardGroup");
 
     let params = new URL(window.location.href);
     let exercisesID = params.searchParams.get("docID");
 
     db.collection("exercises")
-      .where("exerciseID", "==", exerciseID)
+      .where("exerciseID", "==", exercisesID)
       .get()
       .then((allExercises) => {
          exercises = allExercises.docs;
@@ -103,7 +103,7 @@ function populateSession() {
             exercisesCard.querySelector(".image").src = image;
             exercisesCard.querySelector(".id").innerHTML = id;
 
-            exerciseCardGroup.appendChild(exerciseCard);
+            exercisesCardGroup.appendChild(exerciseCard);
          })
     })
 }

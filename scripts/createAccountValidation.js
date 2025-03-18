@@ -19,7 +19,6 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// ✅ Ensure button click event is handled correctly
 document.getElementById("submit").addEventListener("click", async function(event) {
     event.preventDefault();
     
@@ -35,7 +34,6 @@ document.getElementById("submit").addEventListener("click", async function(event
     await registerUser(first, last, date, email, password, username);
 });
 
-// ✅ Function to check if user already exists in Firestore
 async function isUserExisting(email, username) {
     const usersRef = collection(db, "users");
 
@@ -51,7 +49,6 @@ async function isUserExisting(email, username) {
     return !emailSnapshot.empty || !usernameSnapshot.empty;
 }
 
-// ✅ Function to register user
 async function registerUser(first, last, date, email, password, username) {
     const exists = await isUserExisting(email, username);
 
@@ -67,9 +64,7 @@ async function registerUser(first, last, date, email, password, username) {
         const user = userCredential.user;
         console.log("Account created:", user);
         
-        // ✅ Store user details in Firestore
         await addDoc(collection(db, "users"), {
-            uid: user.uid,
             firstName: first,
             lastName: last,
             birthDate: date,

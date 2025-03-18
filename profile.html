@@ -33,18 +33,23 @@
           const analytics = getAnalytics(app);
         </script>
         <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/4.8.1/firebase-ui-auth.css" />
-        <link rel="stylesheet" href="./styles/style.css">
+        <link type="text/css" rel="stylesheet" href="./styles/profile.css">
     </head>
 
     <body class="bg-body-primary">
         <header>
           <nav id="navBarPlaceholder"></nav>
-
         </header>
         <!--Rest of content goes here-->
+        <div id="userInfoCard" class="card">
+          <div id="accountInfo" class="card-body">
+            <h2>Welcome back <span id="fullName"></span></h2>
+            <h4 id="userName"></h4>
+            <p id="dateOfBirth"></p>
 
-        
-        <footer id="footerPlaceHolder"></footer>
+          </div>
+        </div>
+        <script type="module" src="scripts/profile.js"></script>
         <script src="scripts/skeleton.js"></script>
     </body>
 </html>

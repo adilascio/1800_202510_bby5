@@ -1,5 +1,8 @@
-
 // Firebase configuration
+import { initializeApp } from "./scripts/authentication.js";
+import { getFirestore } from "./scripts/authentication.js";
+
+
 const firebaseConfig = {
     apiKey: "AIzaSyClqsSTYdjvWkReamO0GPJrD6m_d5zY9UI",
     authDomain: "gympal-8419a.firebaseapp.com",
@@ -10,9 +13,8 @@ const firebaseConfig = {
     measurementId: "G-MEW3WG1HGT"
 };
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
 
 function writeExercises() {
 
@@ -109,9 +111,7 @@ function populateSession() {
 }
 
 populateSession();
-
-getExerciseName(exerciseDocID);
-
+getExercisesName(exercisesDocID);
 displayExercisesInfo();
 
 

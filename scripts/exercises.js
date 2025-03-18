@@ -1,16 +1,10 @@
-// Your web app's Firebase configuration
-const firebaseConfig = {
-    apiKey: "AIzaSyClqsSTYdjvWkReamO0GPJrD6m_d5zY9UI",
-    authDomain: "gympal-8419a.firebaseapp.com",
-    projectId: "gympal-8419a",
-    storageBucket: "gympal-8419a.firebasestorage.app",
-    messagingSenderId: "193277208966",
-    appId: "1:193277208966:web:c5ff40b20d0dd283ce2407",
-    measurementId: "G-MEW3WG1HGT"
-};
-module = firebase.initializeApp(firebaseConfig);
+// Import Firebase configuration
+import { firebaseConfig } from './firebaseConfig.js';
+
 // Initialize Firebase
-const app = firebase.initializeApp(firebaseConfig);
+firebase.initializeApp(firebaseConfig);
+
+// Initialize Cloud Firestore and get a reference to the service
 const db = firebase.firestore();
 
 function displayExercisesDynamically(collectionName) {

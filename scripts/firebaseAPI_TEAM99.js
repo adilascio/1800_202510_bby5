@@ -1,9 +1,6 @@
-// Import Firebase SDK
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
-import { getFirestore } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
-import { getAuth } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
 
-// Your Firebase configuration (DO NOT EXPOSE THIS PUBLICLY)
+// Firebase configuration
 const firebaseConfig = {
     apiKey: "AIzaSyClqsSTYdjvWkReamO0GPJrD6m_d5zY9UI",
     authDomain: "gympal-8419a.firebaseapp.com",
@@ -16,8 +13,6 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const auth = getAuth(app);
 
-// Export Firebase instances for use in other files
-export { app, db, auth };
+
+export {app};

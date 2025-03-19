@@ -99,9 +99,7 @@ function populateSession() {
 }
 
 populateSession();
-
-getExerciseName(exerciseDocID);
-
+getExercisesName(exercisesDocID);
 displayExercisesInfo();
 
 

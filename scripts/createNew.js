@@ -90,7 +90,9 @@ import {
   }
   
   // Call the function to populate the dropdown
-  populateExerciseDropdown();
+  populateExerciseDropdown().then(() => {
+    attachExerciseListeners();
+  });
   
   async function populateEventDropdown() {
     try {
@@ -133,7 +135,9 @@ import {
   }
   
   // Call the function to populate the event dropdown
-  populateEventDropdown();
+  populateEventDropdown().then(() => {
+    attachEventListeners();
+  });
   
   function displayExercises(collection) {
     let cardTemplate = document.getElementById("exercisesCardTemplate");
@@ -285,3 +289,67 @@ function writeSession() {
 // Example usage of the test function
 // Replace "exampleUID" with the actual user ID
 //stestWriteSession("exampleUID");
+
+function updateSelectedExercise() {
+  const selectedExercise = document.querySelector('input[name="exercise"]:checked');
+  const selectedExerciseTextBox = document.getElementById("selectedExercise");
+  if (selectedExercise) {
+    selectedExerciseTextBox.value = selectedExercise.value;
+  } else {
+    selectedExerciseTextBox.value = ""; // Clear the text box if no exercise is selected
+  }
+}
+
+// Attach event listeners to exercise radio buttons
+function attachExerciseListeners() {
+  const exerciseRadios = document.querySelectorAll('input[name="exercise"]');
+  exerciseRadios.forEach((radio) => {
+    radio.addEventListener("change", updateSelectedExercise);
+  });
+}
+
+function updateSelectedEvent() {
+  const selectedEvent = document.querySelector('input[name="event"]:checked');
+  const selectedEventTextBox = document.getElementById("selectedEvent");
+  if (selectedEvent) {
+    selectedEventTextBox.value = selectedEvent.value;
+  } else {
+    selectedEventTextBox.value = ""; // Clear the text box if no event is selected
+  }
+}
+
+// Attach event listeners to event radio buttons
+function attachEventListeners() {
+  const eventRadios = document.querySelectorAll('input[name="event"]');
+  eventRadios.forEach((radio) => {
+    radio.addEventListener("change", updateSelectedEvent);
+  });
+}
+
+// Call this function after populating the event dropdown
+populateEventDropdown().then(() => {
+  attachEventListeners();
+});
+
+function toSession() {
+  window.location.href = "CreateSession.html";
+}
+
+// Attach event listener to the button
+document.addEventListener("DOMContentLoaded", () => {
+  const createSessionButton = document.querySelector('button[onclick="toSession()"]');
+  if (createSessionButton) {
+    createSessionButton.addEventListener("click", toSession);
+  }
+});
+
+function toEvent() {
+  window.location.href = "CreateEvent.html";
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  const createEventButtons = document.querySelectorAll('button[onclick="toEvent()"]');
+  createEventButtons.forEach((button) => {
+    button.addEventListener("click", toEvent);
+  });
+});

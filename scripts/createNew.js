@@ -49,13 +49,10 @@ import {
   // Call the function to get the exercise name and set it as the ID
   getExerciseNameAndSetDocID();
   
-  async function populateExerciseDropdown() {
+  async function populateExerciseDropdown(dropdownMenu) {
     try {
       const exercisesRef = collection(db, "exercises");
       const querySnapshot = await getDocs(exercisesRef);
-  
-      const dropdownMenu = document.getElementById("exerciseDropdown");
-      dropdownMenu.innerHTML = ""; // Clear existing items
   
       querySnapshot.forEach((doc) => {
         const exerciseName = doc.data().name;
@@ -66,20 +63,23 @@ import {
         // Create a radio button
         const radioButton = document.createElement("input");
         radioButton.type = "radio";
-        radioButton.name = "exercise";
-        radioButton.id = `exercise-${exerciseName}`;
+        radioButton.name = `exercise-${dropdownMenu.parentElement.parentElement.querySelector(".selectedExercise").id}`;
         radioButton.value = exerciseName;
         radioButton.className = "form-check-input";
   
         // Create a label for the radio button
         const label = document.createElement("label");
-        label.htmlFor = `exercise-${exerciseName}`;
         label.className = "form-check-label";
         label.textContent = exerciseName;
   
         // Append the radio button and label to the list item
         listItem.appendChild(radioButton);
         listItem.appendChild(label);
+  
+        // Add a click event to update the selected exercise
+        radioButton.addEventListener("change", () => {
+          dropdownMenu.parentElement.parentElement.querySelector(".selectedExercise").value = exerciseName;
+        });
   
         // Append the list item to the dropdown menu
         dropdownMenu.appendChild(listItem);
@@ -88,11 +88,6 @@ import {
       console.error("Error populating exercise dropdown:", error);
     }
   }
-  
-  // Call the function to populate the dropdown
-  populateExerciseDropdown().then(() => {
-    attachExerciseListeners();
-  });
   
   async function populateEventDropdown() {
     try {
@@ -134,11 +129,6 @@ import {
     }
   }
   
-  // Call the function to populate the event dropdown
-  populateEventDropdown().then(() => {
-    attachEventListeners();
-  });
-  
   function displayExercises(collection) {
     let cardTemplate = document.getElementById("exercisesCardTemplate");
       db.collection(collection).get() 
@@ -163,77 +153,92 @@ import {
 const auth = getAuth(app);
 
 // Write Sessions to Firestore
+document.addEventListener("DOMContentLoaded", () => {
+  const addExerciseButton = document.getElementById("addExerciseButton");
+  const exerciseContainer = document.getElementById("exerciseContainer");
+
+  addExerciseButton.addEventListener("click", () => {
+    const exerciseGroup = document.querySelector(".exercise-group").cloneNode(true);
+
+    // Clear the cloned inputs
+    exerciseGroup.querySelector(".selectedExercise").value = "";
+    exerciseGroup.querySelector(".inputsets").value = "";
+    exerciseGroup.querySelector(".inputreps").value = "";
+    exerciseGroup.querySelector(".inputweight").value = "";
+
+    // Reattach event listeners for the new dropdown
+    const dropdownMenu = exerciseGroup.querySelector(".exerciseDropdown");
+    dropdownMenu.innerHTML = ""; // Clear existing items
+
+    populateExerciseDropdown(dropdownMenu);
+
+    exerciseContainer.appendChild(exerciseGroup);
+  });
+
+  populateExerciseDropdown(document.querySelector(".exerciseDropdown"));
+});
+
 function writeSession() {
-  console.log("writeSession function called"); // Log to confirm function execution
+  console.log("writeSession function called");
 
   try {
     // Get form values
     let sessionDate = document.getElementById("inputdate").value;
-    let sessionDuration = document.getElementById("inputetime").value;
-    let sessionSets = document.getElementById("inputsets").value;
-    let sessionReps = document.getElementById("inputreps").value;
-
-    // Get selected exercise
-    let selectedExercise = document.querySelector('input[name="exercise"]:checked');
-    let exerciseName = selectedExercise ? selectedExercise.value : null;
-
-    // Get selected event (if checkbox is checked)
     let isEventSubmission = document.getElementById("myCheckbox").checked;
     let selectedEvent = isEventSubmission
       ? document.querySelector('input[name="event"]:checked')
       : null;
     let eventName = selectedEvent ? selectedEvent.value : null;
 
-    console.log("Form values:", {
-      sessionDate,
-      sessionDuration,
-      sessionSets,
-      sessionReps,
-      exerciseName,
-      eventName,
+    const exercises = [];
+    const exerciseGroups = document.querySelectorAll(".exercise-group");
+
+    exerciseGroups.forEach((group) => {
+      const exerciseName = group.querySelector(".selectedExercise").value;
+      const sets = group.querySelector(".inputsets").value;
+      const reps = group.querySelector(".inputreps").value;
+      const weight = group.querySelector(".inputweight").value;
+
+      if (exerciseName && sets && reps && weight) {
+        exercises.push({ exerciseName, sets, reps, weight });
+      }
     });
 
-    // Check if required fields are filled
-    if (!sessionDate || !sessionDuration || !sessionSets || !sessionReps || !exerciseName) {
-      console.error("Missing required form fields");
+    console.log("Form values:", {
+      sessionDate,
+      eventName,
+      exercises,
+    });
+
+    if (!sessionDate || exercises.length === 0) {
       alert("Please fill in all required fields.");
       return;
     }
 
     // Generate a unique session ID
     let sessionID = uuidv4();
-    console.log("Generated session ID:", sessionID);
 
-    // Get the current user
     onAuthStateChanged(auth, async (user) => {
       if (user) {
-        console.log("Firebase Auth UID:", user.uid);
-
-        // Reference the user's sessions subcollection
         const userSessionsRef = doc(collection(db, "users", user.uid, "sessions"), sessionID);
 
-        // Add the session document
         setDoc(userSessionsRef, {
-          sessionID: sessionID,
-          sessionDate: sessionDate,
-          sessionDuration: sessionDuration,
-          sessionSets: sessionSets,
-          sessionReps: sessionReps,
-          exerciseName: exerciseName,
-          eventName: eventName,
+          sessionID,
+          sessionDate,
+          eventName,
+          exercises,
           timestamp: new Date(),
         })
+          // After successfully saving the session, redirect the user to progress.html
           .then(() => {
-            console.log("Session successfully written!");
             alert("Session successfully saved!");
-            //window.location.href = "profile.html"; // Redirect to the thanks page
+            window.location.href = "progress.html";
           })
           .catch((error) => {
             console.error("Error writing session to Firestore:", error);
             alert("Error saving session. Please try again.");
           });
       } else {
-        console.error("No user is signed in");
         alert("You must be signed in to save a session.");
         window.location.href = "createNew.html";
       }
@@ -242,53 +247,10 @@ function writeSession() {
     console.error("Error in writeSession function:", error);
     alert("An unexpected error occurred. Please try again.");
   }
-
-  // Test Firestore write
-  setDoc(doc(collection(db, "testCollection"), "testDoc"), {
-    testField: "testValue",
-  })
-    .then(() => {
-      console.log("Test document successfully written!");
-    })
-    .catch((error) => {
-      console.error("Error writing test document:", error);
-    });
 }
 
 // Attach writeSession to the global window object
-// window.writeSession = writeSession;
-
-// // Test function to write a new subcollection "sessions" with a document "session"
-// async function testWriteSession(uid) {
-//   console.log("testWriteSession function called");
-
-//   try {
-//     // Example session data
-//     const sessionData = {
-//       sessionID: "testSessionID",
-//       sessionDate: "2023-10-01",
-//       sessionDuration: 60,
-//       sessionSets: 3,
-//       sessionReps: 12,
-//       exerciseName: "Push-ups",
-//       eventName: "Morning Workout",
-//       timestamp: new Date(),
-//     };
-
-//     // Reference the user's sessions subcollection
-//     const userSessionsRef = doc(collection(db, "users", uid, "sessions"), "session");
-
-//     // Write the session data
-//     await setDoc(userSessionsRef, sessionData);
-//     console.log("Test session successfully written!");
-//   } catch (error) {
-//     console.error("Error writing test session:", error);
-//   }
-// }
-
-// Example usage of the test function
-// Replace "exampleUID" with the actual user ID
-//stestWriteSession("exampleUID");
+window.writeSession = writeSession;
 
 function updateSelectedExercise() {
   const selectedExercise = document.querySelector('input[name="exercise"]:checked');

@@ -95,15 +95,15 @@ import {
       const querySnapshot = await getDocs(eventsRef);
   
       const dropdownMenu = document.getElementById("eventDropdown");
-      dropdownMenu.innerHTML = ""; // Clear existing items
+      dropdownMenu.innerHTML = ""; 
   
       querySnapshot.forEach((doc) => {
         const eventName = doc.data().name;
   
-        // Create a list item
+        
         const listItem = document.createElement("li");
   
-        // Create a radio button
+        
         const radioButton = document.createElement("input");
         radioButton.type = "radio";
         radioButton.name = "event";
@@ -111,17 +111,17 @@ import {
         radioButton.value = eventName;
         radioButton.className = "form-check-input";
   
-        // Create a label for the radio button
+        
         const label = document.createElement("label");
         label.htmlFor = `event-${eventName}`;
         label.className = "form-check-label";
         label.textContent = eventName;
   
-        // Append the radio button and label to the list item
+        
         listItem.appendChild(radioButton);
         listItem.appendChild(label);
   
-        // Append the list item to the dropdown menu
+        
         dropdownMenu.appendChild(listItem);
       });
     } catch (error) {
@@ -142,17 +142,17 @@ import {
 
 }
 
-import { v4 as uuidv4 } from "https://cdn.jsdelivr.net/npm/uuid@9.0.0/dist/esm-browser/index.js"; // Import UUID for unique IDs
+import { v4 as uuidv4 } from "https://cdn.jsdelivr.net/npm/uuid@9.0.0/dist/esm-browser/index.js"; 
 
 import {
   getAuth,
   onAuthStateChanged,
 } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
 
-// Initialize Firebase Authentication
+
 const auth = getAuth(app);
 
-// Write Sessions to Firestore
+
 document.addEventListener("DOMContentLoaded", () => {
   const addExerciseButton = document.getElementById("addExerciseButton");
   const exerciseContainer = document.getElementById("exerciseContainer");
@@ -160,15 +160,15 @@ document.addEventListener("DOMContentLoaded", () => {
   addExerciseButton.addEventListener("click", () => {
     const exerciseGroup = document.querySelector(".exercise-group").cloneNode(true);
 
-    // Clear the cloned inputs
+    
     exerciseGroup.querySelector(".selectedExercise").value = "";
     exerciseGroup.querySelector(".inputsets").value = "";
     exerciseGroup.querySelector(".inputreps").value = "";
     exerciseGroup.querySelector(".inputweight").value = "";
 
-    // Reattach event listeners for the new dropdown
+    
     const dropdownMenu = exerciseGroup.querySelector(".exerciseDropdown");
-    dropdownMenu.innerHTML = ""; // Clear existing items
+    dropdownMenu.innerHTML = ""; 
 
     populateExerciseDropdown(dropdownMenu);
 
@@ -182,7 +182,7 @@ function writeSession() {
   console.log("writeSession function called");
 
   try {
-    // Get form values
+    
     let sessionDate = document.getElementById("inputdate").value;
     let isEventSubmission = document.getElementById("myCheckbox").checked;
     let selectedEvent = isEventSubmission
@@ -215,7 +215,7 @@ function writeSession() {
       return;
     }
 
-    // Generate a unique session ID
+    
     let sessionID = uuidv4();
 
     onAuthStateChanged(auth, async (user) => {
@@ -229,7 +229,7 @@ function writeSession() {
           exercises,
           timestamp: new Date(),
         })
-          // After successfully saving the session, redirect the user to progress.html
+          
           .then(() => {
             alert("Session successfully saved!");
             window.location.href = "progress.html";
@@ -249,7 +249,7 @@ function writeSession() {
   }
 }
 
-// Attach writeSession to the global window object
+
 window.writeSession = writeSession;
 
 function updateSelectedExercise() {
@@ -258,11 +258,11 @@ function updateSelectedExercise() {
   if (selectedExercise) {
     selectedExerciseTextBox.value = selectedExercise.value;
   } else {
-    selectedExerciseTextBox.value = ""; // Clear the text box if no exercise is selected
+    selectedExerciseTextBox.value = ""; 
   }
 }
 
-// Attach event listeners to exercise radio buttons
+
 function attachExerciseListeners() {
   const exerciseRadios = document.querySelectorAll('input[name="exercise"]');
   exerciseRadios.forEach((radio) => {
@@ -276,11 +276,11 @@ function updateSelectedEvent() {
   if (selectedEvent) {
     selectedEventTextBox.value = selectedEvent.value;
   } else {
-    selectedEventTextBox.value = ""; // Clear the text box if no event is selected
+    selectedEventTextBox.value = ""; 
   }
 }
 
-// Attach event listeners to event radio buttons
+
 function attachEventListeners() {
   const eventRadios = document.querySelectorAll('input[name="event"]');
   eventRadios.forEach((radio) => {

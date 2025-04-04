@@ -84,6 +84,16 @@ async function displaySessions() {
                 ? "Unpin this session"
                 : "Pin this session";
 
+              // Add a trash icon for each session
+              const trashIcon = document.createElement("button");
+              trashIcon.className = "btn btn-outline-primary btn-sm ms-2";
+              trashIcon.innerHTML = pinnedIds.includes(sessionData.id)
+               ?'<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16"><path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0"/></svg>'  
+               :'<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16"><path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0"/></svg>'
+              trashIcon.title = pinnedIds.includes(sessionData.id)
+                ? "Delete this session"
+                : "Delete this session";
+
               pinIcon.addEventListener("click", async () => {
                 try {
                   if (pinnedIds.includes(sessionData.id)) {
@@ -107,7 +117,26 @@ async function displaySessions() {
                 }
               });
 
+              trashIcon.addEventListener("click", async () => {
+                try {
+                  // Delete the session
+                  await deleteDoc(doc(sessionsRef, sessionData.id));
+                  if (pinnedIds.includes(sessionData.id)) {
+                    // If the session is pinned, unpin it as well
+                    await deleteDoc(doc(pinnedRef, sessionData.id));
+                    pinnedIds.splice(pinnedIds.indexOf(sessionData.id), 1);
+                  }
+                  // Remove the session details from the UI
+                  sessionDetails.remove();
+                  alert("Session deleted successfully!");
+                } catch (error) {
+                  console.error("Error deleting session:", error);
+                  alert("Failed to delete session. Please try again.");
+                }
+              });
+
               sessionDetails.appendChild(pinIcon);
+              sessionDetails.appendChild(trashIcon);
               cardBody.appendChild(sessionDetails);
             });
 

@@ -12,19 +12,17 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
-  // Wait for DOM to load before adding event listeners
-  document.addEventListener("DOMContentLoaded", function() {
-      document.getElementById("login-form").addEventListener("submit", function(event) {
-          event.preventDefault(); // Prevent form from reloading the page
+  // Add event listener to the login form
+  document.getElementById("login-form").addEventListener("submit", function(event) {
+      event.preventDefault(); // Prevent form from reloading the page
 
-          // Get email and password values
-          let email = document.getElementById("floatingInput").value;
-          let password = document.getElementById("floatingPassword").value;
-          signInWithEmailAndPassword(auth, email, password) 
-              .then((userCredential) => {
-                  console.log("User logged in:", userCredential.user);
-                  window.location.href = "./main.html"; // Redirect to main page
-            });
-    });
+      // Get email and password values
+      let email = document.getElementById("floatingInput").value;
+      let password = document.getElementById("floatingPassword").value;
+      signInWithEmailAndPassword(auth, email, password) 
+          .then((userCredential) => {
+              console.log("User logged in:", userCredential.user);
+              window.location.href = "./main.html"; // Redirect to main page
+          });
+  });
 });
-}

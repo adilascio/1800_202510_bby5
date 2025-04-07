@@ -11,6 +11,17 @@ import {
   
   import { app } from "./firebaseAPI_TEAM99.js";
   
+  
+import { v4 as uuidv4 } from "https://cdn.jsdelivr.net/npm/uuid@9.0.0/dist/esm-browser/index.js"; 
+
+import {
+  getAuth,
+  onAuthStateChanged,
+} from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
+
+
+const auth = getAuth(app);
+
   // Initialize Firestore
   const db = getFirestore(app);
   
@@ -89,94 +100,6 @@ import {
     }
   }
   
-  async function populateEventDropdown() {
-    try {
-      const eventsRef = collection(db, "events");
-      const querySnapshot = await getDocs(eventsRef);
-  
-      const dropdownMenu = document.getElementById("eventDropdown");
-      dropdownMenu.innerHTML = ""; 
-  
-      querySnapshot.forEach((doc) => {
-        const eventName = doc.data().name;
-  
-        
-        const listItem = document.createElement("li");
-  
-        
-        const radioButton = document.createElement("input");
-        radioButton.type = "radio";
-        radioButton.name = "event";
-        radioButton.id = `event-${eventName}`;
-        radioButton.value = eventName;
-        radioButton.className = "form-check-input";
-  
-        
-        const label = document.createElement("label");
-        label.htmlFor = `event-${eventName}`;
-        label.className = "form-check-label";
-        label.textContent = eventName;
-  
-        
-        listItem.appendChild(radioButton);
-        listItem.appendChild(label);
-  
-        
-        dropdownMenu.appendChild(listItem);
-      });
-    } catch (error) {
-      console.error("Error populating event dropdown:", error);
-    }
-  }
-  
-  function displayExercises(collection) {
-    let cardTemplate = document.getElementById("exercisesCardTemplate");
-      db.collection(collection).get() 
-       allExercises.forEach(doc => {
-        var name = doc.data().name;
-
-        newCard.querySelector(".name").innerHTML = name;
-
-        document.getElementById(collection + "-go-here").appendChild(newCard);
-  });
-
-}
-
-import { v4 as uuidv4 } from "https://cdn.jsdelivr.net/npm/uuid@9.0.0/dist/esm-browser/index.js"; 
-
-import {
-  getAuth,
-  onAuthStateChanged,
-} from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
-
-
-const auth = getAuth(app);
-
-
-document.addEventListener("DOMContentLoaded", () => {
-  const addExerciseButton = document.getElementById("addExerciseButton");
-  const exerciseContainer = document.getElementById("exerciseContainer");
-
-  addExerciseButton.addEventListener("click", () => {
-    const exerciseGroup = document.querySelector(".exercise-group").cloneNode(true);
-
-    
-    exerciseGroup.querySelector(".selectedExercise").value = "";
-    exerciseGroup.querySelector(".inputsets").value = "";
-    exerciseGroup.querySelector(".inputreps").value = "";
-    exerciseGroup.querySelector(".inputweight").value = "";
-
-    
-    const dropdownMenu = exerciseGroup.querySelector(".exerciseDropdown");
-    dropdownMenu.innerHTML = ""; 
-
-    populateExerciseDropdown(dropdownMenu);
-
-    exerciseContainer.appendChild(exerciseGroup);
-  });
-
-  populateExerciseDropdown(document.querySelector(".exerciseDropdown"));
-});
 
 function writeSession() {
   console.log("writeSession function called");
@@ -281,17 +204,7 @@ function updateSelectedEvent() {
 }
 
 
-function attachEventListeners() {
-  const eventRadios = document.querySelectorAll('input[name="event"]');
-  eventRadios.forEach((radio) => {
-    radio.addEventListener("change", updateSelectedEvent);
-  });
-}
 
-// Call this function after populating the event dropdown
-populateEventDropdown().then(() => {
-  attachEventListeners();
-});
 
 function toSession() {
   window.location.href = "CreateSession.html";

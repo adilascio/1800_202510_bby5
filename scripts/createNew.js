@@ -60,46 +60,7 @@ const auth = getAuth(app);
   // Call the function to get the exercise name and set it as the ID
   getExerciseNameAndSetDocID();
   
-  async function populateExerciseDropdown(dropdownMenu) {
-    try {
-      const exercisesRef = collection(db, "exercises");
-      const querySnapshot = await getDocs(exercisesRef);
-  
-      querySnapshot.forEach((doc) => {
-        const exerciseName = doc.data().name;
-  
-        // Create a list item
-        const listItem = document.createElement("li");
-  
-        // Create a radio button
-        const radioButton = document.createElement("input");
-        radioButton.type = "radio";
-        radioButton.name = `exercise-${dropdownMenu.parentElement.parentElement.querySelector(".selectedExercise").id}`;
-        radioButton.value = exerciseName;
-        radioButton.className = "form-check-input";
-  
-        // Create a label for the radio button
-        const label = document.createElement("label");
-        label.className = "form-check-label";
-        label.textContent = exerciseName;
-  
-        // Append the radio button and label to the list item
-        listItem.appendChild(radioButton);
-        listItem.appendChild(label);
-  
-        // Add a click event to update the selected exercise
-        radioButton.addEventListener("change", () => {
-          dropdownMenu.parentElement.parentElement.querySelector(".selectedExercise").value = exerciseName;
-        });
-  
-        // Append the list item to the dropdown menu
-        dropdownMenu.appendChild(listItem);
-      });
-    } catch (error) {
-      console.error("Error populating exercise dropdown:", error);
-    }
-  }
-  
+ 
 
 function writeSession() {
   console.log("writeSession function called");
@@ -174,37 +135,6 @@ function writeSession() {
 
 
 window.writeSession = writeSession;
-
-function updateSelectedExercise() {
-  const selectedExercise = document.querySelector('input[name="exercise"]:checked');
-  const selectedExerciseTextBox = document.getElementById("selectedExercise");
-  if (selectedExercise) {
-    selectedExerciseTextBox.value = selectedExercise.value;
-  } else {
-    selectedExerciseTextBox.value = ""; 
-  }
-}
-
-
-function attachExerciseListeners() {
-  const exerciseRadios = document.querySelectorAll('input[name="exercise"]');
-  exerciseRadios.forEach((radio) => {
-    radio.addEventListener("change", updateSelectedExercise);
-  });
-}
-
-function updateSelectedEvent() {
-  const selectedEvent = document.querySelector('input[name="event"]:checked');
-  const selectedEventTextBox = document.getElementById("selectedEvent");
-  if (selectedEvent) {
-    selectedEventTextBox.value = selectedEvent.value;
-  } else {
-    selectedEventTextBox.value = ""; 
-  }
-}
-
-
-
 
 function toSession() {
   window.location.href = "CreateSession.html";

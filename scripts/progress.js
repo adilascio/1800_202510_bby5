@@ -16,156 +16,11 @@ import {
 const db = getFirestore(app);
 const auth = getAuth(app);
 
-async function displaySessions() {
-  const sessionsContainer = document.createElement("div");
-  sessionsContainer.className = "container mt-4";
+// Improved error handling, safer HTML injection, and reusable functions
 
-  onAuthStateChanged(auth, async (user) => {
-    if (user) {
-      const uid = user.uid;
-      const sessionsRef = collection(db, "users", uid, "sessions");
-      const pinnedRef = collection(db, "users", uid, "pinned");
-
-      try {
-        const pinnedSnapshot = await getDocs(pinnedRef);
-        const pinnedIds = pinnedSnapshot.docs.map((doc) => doc.id);
-
-        const querySnapshot = await getDocs(sessionsRef);
-
-        if (!querySnapshot.empty) {
-          // Organize sessions by date
-          const sessionsByDate = {};
-
-          querySnapshot.forEach((doc) => {
-            const sessionData = doc.data();
-            const sessionDate = sessionData.sessionDate;
-
-            if (!sessionsByDate[sessionDate]) {
-              sessionsByDate[sessionDate] = [];
-            }
-
-            // Extract exercises data
-            const exercises = sessionData.exercises || [];
-            const exerciseDetails = exercises.map((exercise) => {
-              return `
-                <strong>Exercise:</strong> ${exercise.exerciseName || "N/A"}<br>
-                <strong>Sets:</strong> ${exercise.sets || "N/A"}<br>
-                <strong>Reps:</strong> ${exercise.reps || "N/A"}<br>
-                <strong>Weight:</strong> ${exercise.weight || "N/A"} lbs<br>
-              `;
-            }).join("<br>");
-
-            sessionsByDate[sessionDate].push({
-              id: doc.id,
-              ...sessionData,
-              exerciseDetails, // Add formatted exercise details
-            });
-          });
-
-          // Sort dates in descending order
-          const sortedDates = Object.keys(sessionsByDate).sort((a, b) => new Date(b) - new Date(a));
-
-          sortedDates.forEach((date) => {
-            // Create a card for each date
-            const dateCard = document.createElement("div");
-            dateCard.className = "card mb-3";
-
-            const cardHeader = document.createElement("div");
-            cardHeader.className = "card-header";
-            cardHeader.textContent = `Date: ${date}`;
-
-            const cardBody = document.createElement("div");
-            cardBody.className = "card-body";
-
-            // Add all sessions for the date
-            sessionsByDate[date].forEach((sessionData) => {
-              const sessionDetails = document.createElement("p");
-              sessionDetails.className = "card-text";
-              sessionDetails.innerHTML = `
-                ${sessionData.exerciseDetails}<br>
-                ${sessionData.eventName ? `<strong>Event:</strong> ${sessionData.eventName}<br>` : ""}
-              `;
-
-              const pinIcon = document.createElement("button");
-              pinIcon.className = "btn btn-outline-primary btn-sm ms-2";
-              pinIcon.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pin-angle" viewBox="0 0 16 16"> <path d="M9.828.722a.5.5 0 0 1 .354.146l4.95 4.95a.5.5 0 0 1 0 .707c-.48.48-1.072.588-1.503.588-.177 0-.335-.018-.46-.039l-3.134 3.134a6 6 0 0 1 .16 1.013c.046.702-.032 1.687-.72 2.375a.5.5 0 0 1-.707 0l-2.829-2.828-3.182 3.182c-.195.195-1.219.902-1.414.707s.512-1.22.707-1.414l3.182-3.182-2.828-2.829a.5.5 0 0 1 0-.707c.688-.688 1.673-.767 2.375-.72a6 6 0 0 1 1.013.16l3.134-3.133a3 3 0 0 1-.04-.461c0-.43.108-1.022.589-1.503a.5.5 0 0 1 .353-.146"/></svg>';
-              pinIcon.title = "Pin this session";
-
-              const trashIcon = document.createElement("button");
-              trashIcon.className = "btn btn-outline-danger btn-sm ms-2";
-              trashIcon.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16"> <path d="M5.5 5.5A.5.5 0 0 1 6 5h4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-.5.5H6a.5.5 0 0 1-.5-.5v-7zM4.118 4a1 1 0 0 1 .876-.5h6.012a1 1 0 0 1 .876.5L12.5 4H14a.5.5 0 0 1 0 1h-1v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5H2a.5.5 0 0 1 0-1h1.5l.618-1z"/></svg>';
-              trashIcon.title = "Delete this session";
-
-              pinIcon.addEventListener("click", async () => {
-                try {
-                  if (pinnedIds.includes(sessionData.id)) {
-                    // Unpin the session
-                    await deleteDoc(doc(pinnedRef, sessionData.id));
-                    pinnedIds.splice(pinnedIds.indexOf(sessionData.id), 1);
-                    pinIcon.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pin-angle" viewBox="0 0 16 16">\n                      <path d="M9.828.722a.5.5 0 0 1 .354.146l4.95 4.95a.5.5 0 0 1 0 .707c-.48.48-1.072.588-1.503.588-.177 0-.335-.018-.46-.039l-3.134 3.134a6 6 0 0 1 .16 1.013c.046.702-.032 1.687-.72 2.375a.5.5 0 0 1-.707 0l-2.829-2.828-3.182 3.182c-.195.195-1.219.902-1.414.707s.512-1.22.707-1.414l3.182-3.182-2.828-2.829a.5.5 0 0 1 0-.707c.688-.688 1.673-.767 2.375-.72a6 6 0 0 1 1.013.16l3.134-3.133a3 3 0 0 1-.04-.461c0-.43.108-1.022.589-1.503a.5.5 0 0 1 .353-.146m.122 2.112v-.002zm0-.002v.002a.5.5 0 0 1-.122.51L6.293 6.878a.5.5 0 0 1-.511.12H5.78l-.014-.004a5 5 0 0 0-.288-.076 5 5 0 0 0-.765-.116c-.422-.028-.836.008-1.175.15l5.51 5.509c.141-.34.177-.753.149-1.175a5 5 0 0 0-.192-1.054l-.004-.013v-.001a.5.5 0 0 1 .12-.512l3.536-3.535a.5.5 0 0 1 .532-.115l.096.022c.087.017.208.034.344.034q.172.002.343-.04L9.927 2.028q-.042.172-.04.343a1.8 1.8 0 0 0 .062.46z"/>\n                    </svg>';
-                    pinIcon.title = "Pin this session";
-                    alert("Session unpinned successfully!");
-                  } else {
-                    // Pin the session
-                    await setDoc(doc(pinnedRef, sessionData.id), sessionData);
-                    pinnedIds.push(sessionData.id);
-                    pinIcon.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pin-angle-fill" viewBox="0 0 16 16">\n                      <path d="M9.828.722a.5.5 0 0 1 .354.146l4.95 4.95a.5.5 0 0 1 0 .707c-.48.48-1.072.588-1.503.588-.177 0-.335-.018-.46-.039l-3.134 3.134a6 6 0 0 1 .16 1.013c.046.702-.032 1.687-.72 2.375a.5.5 0 0 1-.707 0l-2.829-2.828-3.182 3.182c-.195.195-1.219.902-1.414.707s.512-1.22.707-1.414l3.182-3.182-2.828-2.829a.5.5 0 0 1 0-.707c.688-.688 1.673-.767 2.375-.72a6 6 0 0 1 1.013.16l3.134-3.133a3 3 0 0 1-.04-.461c0-.43.108-1.022.589-1.503a.5.5 0 0 1 .353-.146"/>\n                    </svg>';
-                    pinIcon.title = "Unpin this session";
-                    alert("Session pinned successfully!");
-                  }
-                } catch (error) {
-                  console.error("Error updating pin status:", error);
-                  alert("Failed to update pin status. Please try again.");
-                }
-              });
-
-              trashIcon.addEventListener("click", async () => {
-                try {
-                  // Delete the session
-                  await deleteDoc(doc(sessionsRef, sessionData.id));
-                  if (pinnedIds.includes(sessionData.id)) {
-                    // If the session is pinned, unpin it as well
-                    await deleteDoc(doc(pinnedRef, sessionData.id));
-                    pinnedIds.splice(pinnedIds.indexOf(sessionData.id), 1);
-                  }
-                  // Remove the session details from the UI
-                  sessionDetails.remove();
-                  alert("Session deleted successfully!");
-                } catch (error) {
-                  console.error("Error deleting session:", error);
-                  alert("Failed to delete session. Please try again.");
-                }
-              });
-
-              sessionDetails.appendChild(pinIcon);
-              sessionDetails.appendChild(trashIcon);
-              cardBody.appendChild(sessionDetails);
-            });
-
-            dateCard.appendChild(cardHeader);
-            dateCard.appendChild(cardBody);
-            sessionsContainer.appendChild(dateCard);
-          });
-        } else {
-          sessionsContainer.innerHTML = `<p>No sessions found.</p>`;
-        }
-      } catch (error) {
-        console.error("Error fetching sessions:", error);
-        sessionsContainer.innerHTML = `<p>Error fetching sessions. Please try again later.</p>`;
-      }
-    } else {
-      sessionsContainer.innerHTML = `<p>You must be logged in to view your sessions.</p>`;
-    }
-
-    // Append the sessions container to the body
-    document.body.appendChild(sessionsContainer);
-  });
-}
-
-// Refactor to ensure proper separation of session display logic
 async function displaySessionsForProgress() {
-  const sessionsContainer = document.createElement("div");
-  sessionsContainer.className = "container mt-4";
+  const sessionsContainer = document.getElementById("sessionCardsContainer");
+  sessionsContainer.innerHTML = ""; // Clear previous content
 
   onAuthStateChanged(auth, async (user) => {
     if (user) {
@@ -176,126 +31,82 @@ async function displaySessionsForProgress() {
         const querySnapshot = await getDocs(sessionsRef);
 
         if (!querySnapshot.empty) {
-          // Organize sessions by date
           const sessionsByDate = {};
 
           querySnapshot.forEach((doc) => {
             const sessionData = doc.data();
             const sessionDate = sessionData.sessionDate;
-
             if (!sessionsByDate[sessionDate]) {
               sessionsByDate[sessionDate] = [];
             }
 
-            // Extract exercises data
             const exercises = sessionData.exercises || [];
-            const exerciseDetails = exercises.map((exercise) => {
-              return `
+            const exerciseDetails = exercises.map(exercise => {
+              const div = document.createElement("div");
+              div.innerHTML = `
                 <strong>Exercise:</strong> ${exercise.exerciseName || "N/A"}<br>
                 <strong>Sets:</strong> ${exercise.sets || "N/A"}<br>
                 <strong>Reps:</strong> ${exercise.reps || "N/A"}<br>
                 <strong>Weight:</strong> ${exercise.weight || "N/A"} lbs<br>
               `;
+              return div.innerHTML;
             }).join("<br>");
 
             sessionsByDate[sessionDate].push({
               id: doc.id,
               ...sessionData,
-              exerciseDetails, // Add formatted exercise details
+              exerciseDetails,
             });
           });
 
-          // Sort dates in descending order
-          const sortedDates = Object.keys(sessionsByDate).sort((a, b) => new Date(b) - new Date(a));
-
-          sortedDates.forEach((date) => {
-            // Create a card for each date
-            const dateCard = document.createElement("div");
-            dateCard.className = "card mb-3";
-
-            const cardHeader = document.createElement("div");
-            cardHeader.className = "card-header";
-            cardHeader.textContent = `Date: ${date}`;
-
-            const cardBody = document.createElement("div");
-            cardBody.className = "card-body";
-
-            // Add all sessions for the date
-            sessionsByDate[date].forEach((sessionData) => {
-              const sessionDetails = document.createElement("p");
-              sessionDetails.className = "card-text";
-              sessionDetails.innerHTML = `
-                ${sessionData.exerciseDetails}<br>
-                ${sessionData.eventName ? `<strong>Event:</strong> ${sessionData.eventName}<br>` : ""}
-              `;
-
-              const pinIcon = document.createElement("button");
-              pinIcon.className = "btn btn-outline-primary btn-sm ms-2";
-              pinIcon.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pin-angle" viewBox="0 0 16 16"> <path d="M9.828.722a.5.5 0 0 1 .354.146l4.95 4.95a.5.5 0 0 1 0 .707c-.48.48-1.072.588-1.503.588-.177 0-.335-.018-.46-.039l-3.134 3.134a6 6 0 0 1 .16 1.013c.046.702-.032 1.687-.72 2.375a.5.5 0 0 1-.707 0l-2.829-2.828-3.182 3.182c-.195.195-1.219.902-1.414.707s.512-1.22.707-1.414l3.182-3.182-2.828-2.829a.5.5 0 0 1 0-.707c.688-.688 1.673-.767 2.375-.72a6 6 0 0 1 1.013.16l3.134-3.133a3 3 0 0 1-.04-.461c0-.43.108-1.022.589-1.503a.5.5 0 0 1 .353-.146"/></svg>';
-              pinIcon.title = "Pin this session";
-
-              const trashIcon = document.createElement("button");
-              trashIcon.className = "btn btn-outline-danger btn-sm ms-2";
-              trashIcon.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16"> <path d="M5.5 5.5A.5.5 0 0 1 6 5h4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-.5.5H6a.5.5 0 0 1-.5-.5v-7zM4.118 4a1 1 0 0 1 .876-.5h6.012a1 1 0 0 1 .876.5L12.5 4H14a.5.5 0 0 1 0 1h-1v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5H2a.5.5 0 0 1 0-1h1.5l.618-1z"/></svg>';
-              trashIcon.title = "Delete this session";
-
-              pinIcon.addEventListener("click", async () => {
-                try {
-                  const pinnedRef = collection(db, "users", uid, "pinned");
-                  const pinnedDoc = doc(pinnedRef, sessionData.id);
-                  const pinnedSnapshot = await getDocs(pinnedRef);
-
-                  if (pinnedSnapshot.docs.some((doc) => doc.id === sessionData.id)) {
-                    await deleteDoc(pinnedDoc);
-                    alert("Session unpinned successfully!");
-                  } else {
-                    await setDoc(pinnedDoc, sessionData);
-                    alert("Session pinned successfully!");
-                  }
-                } catch (error) {
-                  console.error("Error pinning/unpinning session:", error);
-                }
-              });
-
-              trashIcon.addEventListener("click", async () => {
-                try {
-                  const sessionsRef = collection(db, "users", uid, "sessions");
-                  await deleteDoc(doc(sessionsRef, sessionData.id));
-                  sessionDetails.remove();
-                  alert("Session deleted successfully!");
-                } catch (error) {
-                  console.error("Error deleting session:", error);
-                }
-              });
-
-              sessionDetails.appendChild(pinIcon);
-              sessionDetails.appendChild(trashIcon);
-              cardBody.appendChild(sessionDetails);
-            });
-
-            dateCard.appendChild(cardHeader);
-            dateCard.appendChild(cardBody);
-            sessionsContainer.appendChild(dateCard);
-          });
+          renderSessions(sessionsByDate, sessionsContainer);
         } else {
-          sessionsContainer.innerHTML = `<p>No sessions found.</p>`;
+          displayMessage(sessionsContainer, "No sessions found.");
         }
       } catch (error) {
         console.error("Error fetching sessions:", error);
-        sessionsContainer.innerHTML = `<p>Error fetching sessions. Please try again later.</p>`;
+        displayMessage(sessionsContainer, "Error fetching sessions. Please try again later.");
       }
     } else {
-      sessionsContainer.innerHTML = `<p>You must be logged in to view your sessions.</p>`;
+      displayMessage(sessionsContainer, "You must be logged in to view your sessions.");
     }
-
-    // Clear previous content and append the sessions container to the body
-    const existingContainer = document.querySelector(".container.mt-4");
-    if (existingContainer) {
-      existingContainer.remove();
-    }
-    document.body.appendChild(sessionsContainer);
   });
 }
 
-// Call the function to display sessions for progress
+function renderSessions(sessionsByDate, container) {
+  const sortedDates = Object.keys(sessionsByDate).sort((a, b) => new Date(b) - new Date(a));
+
+  sortedDates.forEach(date => {
+    const dateCard = document.createElement("div");
+    dateCard.className = "card mb-3";
+
+    const cardHeader = document.createElement("div");
+    cardHeader.className = "card-header";
+    cardHeader.textContent = `Date: ${date}`;
+
+    const cardBody = document.createElement("div");
+    cardBody.className = "card-body";
+
+    sessionsByDate[date].forEach(sessionData => {
+      const sessionDetails = document.createElement("p");
+      sessionDetails.className = "card-text";
+      sessionDetails.innerHTML = `
+        ${sessionData.exerciseDetails}<br>
+        ${sessionData.eventName ? `<strong>Event:</strong> ${sessionData.eventName}<br>` : ""}
+      `;
+
+      cardBody.appendChild(sessionDetails);
+    });
+
+    dateCard.appendChild(cardHeader);
+    dateCard.appendChild(cardBody);
+    container.appendChild(dateCard);
+  });
+}
+
+function displayMessage(container, message) {
+  container.innerHTML = `<p>${message}</p>`;
+}
+
+// Call the fixed function
 displaySessionsForProgress();

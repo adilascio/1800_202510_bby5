@@ -1,140 +1,52 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset = "utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <!-- Link to Bootstrap -->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-        <link rel="stylesheet" href="./styles/style.css">
-        <!-- Firebase plugin -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-        <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-        <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-        <script src="https://www.gstatic.com/firebasejs/ui/4.8.1/firebase-ui-auth.js"></script>
-        <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/4.8.1/firebase-ui-auth.css" />
-    </head>
+    <!-- Link to Bootstrap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/4.8.1/firebase-ui-auth.css" />
+    <link rel="stylesheet" href="./styles/style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  </head>
 
-    <body class="bg-body-primary">
-        <header>
-          <nav id="navBarPlaceholder"></nav>
-        </header>
-        <!--Rest of content goes here-->
-        
-        <div class="Event">       
-            <div class="p-5 text-center bg-body-tertiary rounded-3">
-                 <h1 class="text-body-emphasis">BCIT Test</h1>
-                 <div class="Leaderboard">
-                    <table class="table table-striped table-hover" style="width:100%;">
-                        <thead>
-                            <tr>
-                                <th scope="col">Rank</th>
-                                <th scope="col">Name</th>
-                                <th scope="col">Score</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <th scope="row">1</th>
-                                <td>Mark</td>
-                                <td>100</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">2</th>
-                                <td>Jacob</td>
-                                <td>90</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">3</th>
-                                <td>Larry</td>
-                                <td>80</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                 </div> 
-                 <br>
-                 <button class="d-inline-flex align-items-center btn btn-primary btn-lg px-4 rounded-pill" type="button">
-Show All
-                    <svg class="bi ms-2" width="24" height="24"><use xlink:href="#arrow-right-short"></use></svg>
-                  </button>
+  <body class="bg-body-primary">
+    <header>
+      <nav id="navBarPlaceholder"></nav>
+    </header>
+
+    <!-- Main container for the events leaderboard -->
+    <main>
+      <div class="container my-5">
+        <div class="p-5 text-center bg-body-tertiary rounded-3">
+          <!-- SVG icon representing a trophy (for the leaderboard) -->
+          <svg xmlns="http://www.w3.org/2000/svg" width= "60" height="60" fill="currentColor" class="bi bi-trophy" viewBox="0 0 16 16">
+            <path d="M2.5.5A.5.5 0 0 1 3 0h10a.5.5 0 0 1 .5.5q0 .807-.034 1.536a3 3 0 1 1-1.133 5.89c-.79 1.865-1.878 2.777-2.833 3.011v2.173l1.425.356c.194.048.377.135.537.255L13.3 15.1a.5.5 0 0 1-.3.9H3a.5.5 0 0 1-.3-.9l1.838-1.379c.16-.12.343-.207.537-.255L6.5 13.11v-2.173c-.955-.234-2.043-1.146-2.833-3.012a3 3 0 1 1-1.132-5.89A33 33 0 0 1 2.5.5m.099 2.54a2 2 0 0 0 .72 3.935c-.333-1.05-.588-2.346-.72-3.935m10.083 3.935a2 2 0 0 0 .72-3.935c-.133 1.59-.388 2.885-.72 3.935M3.504 1q.01.775.056 1.469c.13 2.028.457 3.546.87 4.667C5.294 9.48 6.484 10 7 10a.5.5 0 0 1 .5.5v2.61a1 1 0 0 1-.757.97l-1.426.356a.5.5 0 0 0-.179.085L4.5 15h7l-.638-.479a.5.5 0 0 0-.18-.085l-1.425-.356a1 1 0 0 1-.757-.97V10.5A.5.5 0 0 1 9 10c.516 0 1.706-.52 2.57-2.864.413-1.12.74-2.64.87-4.667q.045-.694.056-1.469z"/>
+          </svg>
+            <path d="M3 2a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2h1a1 1 0 0 1 1 1v1a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V5a1 1 0 0 1 1-1h1V2zm2-1a1 1 0 0 0-1 1v2h8V2a1 1 0 0 0-1-1H5z"/>
+            <path d="M7 11h2a3 3 0 0 0 3-3V7H4v1a3 3 0 0 0 3 3z"/>
+          </svg>
+          <h1 class="text-body-emphasis">Your Events Leaderboard</h1>
+          <div class="overflow" style="overflow-y: scroll; height: 400px; width: 100%;">
+            <p class="col-lg-8 mx-auto fs-5 text-muted">
+              Check out your events leaderboard! Track your performance, view rankings, and see how you compare.
+            </p>
+            <!-- Event cards will be dynamically inserted here -->
+            <div id="eventCardsContainer">
+              <!-- ...existing event cards... -->
             </div>
+          </div>
         </div>
-        <div class="Event">
-            <div class="p-5 text-center bg-body-tertiary rounded-3">
-                <h1 class="text-body-emphasis">Event 2</h1>
-                <div class="Leaderboard">
-                    <table class="table table-striped table-hover" style="width:100%;">
-                        <thead>
-                            <tr>
-                                <th scope="col">Rank</th>
-                                <th scope="col">Name</th>
-                                <th scope="col">Score</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <th scope="row">1</th>
-                                <td>Mark</td>
-                                <td>100</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">2</th>
-                                <td>Jacob</td>
-                                <td>90</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">3</th>
-                                <td>Larry</td>
-                                <td>80</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                 </div> 
-                 <button class="d-inline-flex align-items-center btn btn-primary btn-lg px-4 rounded-pill" type="button">
-                    Show All
-                   <svg class="bi ms-2" width="24" height="24"><use xlink:href="#arrow-right-short"></use></svg>
-                 </button>
-            </div>
-        </div>
-        <div class="Event">
-            <div class="p-5 text-center bg-body-tertiary rounded-3">
-                <h1 class="text-body-emphasis">Event 3</h1>
-                <div class="Leaderboard">
-                    <table class="table table-striped table-hover" style="width:100%;">
-                        <thead>
-                            <tr>
-                                <th scope="col">Rank</th>
-                                <th scope="col">Name</th>
-                                <th scope="col">Score</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <th scope="row">1</th>
-                                <td>Mark</td>
-                                <td>100</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">2</th>
-                                <td>Jacob</td>
-                                <td>90</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">3</th>
-                                <td>Larry</td>
-                                <td>80</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                 </div> 
-                 <button class="d-inline-flex align-items-center btn btn-primary btn-lg px-4 rounded-pill" type="button">
-                    Show All
-                   <svg class="bi ms-2" width="24" height="24"><use xlink:href="#arrow-right-short"></use></svg>
-                 </button>
-            </div>
-        </div>
-        <footer id="footerPlaceHolder"></footer>
-        <script src="scripts/skeleton.js"></script>
-    </body>
+      </div>
+    </main>
+
+    <footer id="footerPlaceHolder"></footer>
+
+    <script src="scripts/skeleton.js"></script>
+    <!-- This script should contain the logic to retrieve and display events -->
+    <script type="module" src="scripts/leaderboard.js"></script>
+    <script type="module" src="scripts/authentication.js"></script>
+    <script type="module" src="scripts/leaderboard.js"></script>
+  </body>
 </html>

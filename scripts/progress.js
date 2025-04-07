@@ -44,7 +44,22 @@ async function displaySessions() {
               sessionsByDate[sessionDate] = [];
             }
 
-            sessionsByDate[sessionDate].push({ id: doc.id, ...sessionData });
+            // Extract exercises data
+            const exercises = sessionData.exercises || [];
+            const exerciseDetails = exercises.map((exercise) => {
+              return `
+                <strong>Exercise:</strong> ${exercise.exerciseName || "N/A"}<br>
+                <strong>Sets:</strong> ${exercise.sets || "N/A"}<br>
+                <strong>Reps:</strong> ${exercise.reps || "N/A"}<br>
+                <strong>Weight:</strong> ${exercise.weight || "N/A"} lbs<br>
+              `;
+            }).join("<br>");
+
+            sessionsByDate[sessionDate].push({
+              id: doc.id,
+              ...sessionData,
+              exerciseDetails, // Add formatted exercise details
+            });
           });
 
           // Sort dates in descending order
@@ -67,10 +82,7 @@ async function displaySessions() {
               const sessionDetails = document.createElement("p");
               sessionDetails.className = "card-text";
               sessionDetails.innerHTML = `
-                <strong>Exercise:</strong> ${sessionData.exerciseName || "N/A"}<br>
-                <strong>Sets:</strong> ${sessionData.sessionSets || "N/A"}<br>
-                <strong>Reps:</strong> ${sessionData.sessionReps || "N/A"}<br>
-                <strong>Duration:</strong> ${sessionData.sessionDuration || "N/A"} minutes<br>
+                ${sessionData.exerciseDetails}<br>
                 ${sessionData.eventName ? `<strong>Event:</strong> ${sessionData.eventName}<br>` : ""}
               `;
 
@@ -160,5 +172,99 @@ async function displaySessions() {
   });
 }
 
-// Call the function to display sessions
-displaySessions();
+// Refactor to ensure proper separation of session display logic
+async function displaySessionsForProgress() {
+  const sessionsContainer = document.createElement("div");
+  sessionsContainer.className = "container mt-4";
+
+  onAuthStateChanged(auth, async (user) => {
+    if (user) {
+      const uid = user.uid;
+      const sessionsRef = collection(db, "users", uid, "sessions");
+
+      try {
+        const querySnapshot = await getDocs(sessionsRef);
+
+        if (!querySnapshot.empty) {
+          // Organize sessions by date
+          const sessionsByDate = {};
+
+          querySnapshot.forEach((doc) => {
+            const sessionData = doc.data();
+            const sessionDate = sessionData.sessionDate;
+
+            if (!sessionsByDate[sessionDate]) {
+              sessionsByDate[sessionDate] = [];
+            }
+
+            // Extract exercises data
+            const exercises = sessionData.exercises || [];
+            const exerciseDetails = exercises.map((exercise) => {
+              return `
+                <strong>Exercise:</strong> ${exercise.exerciseName || "N/A"}<br>
+                <strong>Sets:</strong> ${exercise.sets || "N/A"}<br>
+                <strong>Reps:</strong> ${exercise.reps || "N/A"}<br>
+                <strong>Weight:</strong> ${exercise.weight || "N/A"} lbs<br>
+              `;
+            }).join("<br>");
+
+            sessionsByDate[sessionDate].push({
+              id: doc.id,
+              ...sessionData,
+              exerciseDetails, // Add formatted exercise details
+            });
+          });
+
+          // Sort dates in descending order
+          const sortedDates = Object.keys(sessionsByDate).sort((a, b) => new Date(b) - new Date(a));
+
+          sortedDates.forEach((date) => {
+            // Create a card for each date
+            const dateCard = document.createElement("div");
+            dateCard.className = "card mb-3";
+
+            const cardHeader = document.createElement("div");
+            cardHeader.className = "card-header";
+            cardHeader.textContent = `Date: ${date}`;
+
+            const cardBody = document.createElement("div");
+            cardBody.className = "card-body";
+
+            // Add all sessions for the date
+            sessionsByDate[date].forEach((sessionData) => {
+              const sessionDetails = document.createElement("p");
+              sessionDetails.className = "card-text";
+              sessionDetails.innerHTML = `
+                ${sessionData.exerciseDetails}<br>
+                ${sessionData.eventName ? `<strong>Event:</strong> ${sessionData.eventName}<br>` : ""}
+              `;
+
+              cardBody.appendChild(sessionDetails);
+            });
+
+            dateCard.appendChild(cardHeader);
+            dateCard.appendChild(cardBody);
+            sessionsContainer.appendChild(dateCard);
+          });
+        } else {
+          sessionsContainer.innerHTML = `<p>No sessions found.</p>`;
+        }
+      } catch (error) {
+        console.error("Error fetching sessions:", error);
+        sessionsContainer.innerHTML = `<p>Error fetching sessions. Please try again later.</p>`;
+      }
+    } else {
+      sessionsContainer.innerHTML = `<p>You must be logged in to view your sessions.</p>`;
+    }
+
+    // Clear previous content and append the sessions container to the body
+    const existingContainer = document.querySelector(".container.mt-4");
+    if (existingContainer) {
+      existingContainer.remove();
+    }
+    document.body.appendChild(sessionsContainer);
+  });
+}
+
+// Call the function to display sessions for progress
+displaySessionsForProgress();

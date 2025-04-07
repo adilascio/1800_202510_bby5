@@ -50,30 +50,58 @@ async function displayPinnedSessions() {
 
       try {
         const querySnapshot = await getDocs(pinnedRef);
+        const sessionsByDate = {};
 
-        if (!querySnapshot.empty) {
+        querySnapshot.forEach((doc) => {
+          const sessionData = doc.data();
+          const sessionDate = sessionData.sessionDate;
+
+          if (!sessionsByDate[sessionDate]) {
+            sessionsByDate[sessionDate] = [];
+          }
+
+          // Extract exercises data
+          const exercises = sessionData.exercises || [];
+          const exerciseDetails = exercises.map((exercise) => {
+            return `
+              <strong>Exercise:</strong> ${exercise.exerciseName || "N/A"}<br>
+              <strong>Sets:</strong> ${exercise.sets || "N/A"}<br>
+              <strong>Reps:</strong> ${exercise.reps || "N/A"}<br>
+              <strong>Weight:</strong> ${exercise.weight || "N/A"} lbs<br>
+            `;
+          }).join("<br>");
+
+          sessionsByDate[sessionDate].push({
+            id: doc.id,
+            ...sessionData,
+            exerciseDetails, // Add formatted exercise details
+          });
+        });
+
+        if (Object.keys(sessionsByDate).length > 0) {
           const pinnedHeader = document.createElement("h3");
           pinnedHeader.textContent = "Pinned Sessions";
           pinnedContainer.appendChild(pinnedHeader);
 
-          querySnapshot.forEach((doc) => {
-            const sessionData = doc.data();
+          Object.keys(sessionsByDate).forEach((date) => {
+            const dateHeader = document.createElement("h4");
+            dateHeader.textContent = date;
+            pinnedContainer.appendChild(dateHeader);
 
-            const sessionCard = document.createElement("div");
-            sessionCard.className = "card mb-3";
+            sessionsByDate[date].forEach((sessionData) => {
+              const sessionCard = document.createElement("div");
+              sessionCard.className = "card mb-3";
 
-            const cardBody = document.createElement("div");
-            cardBody.className = "card-body";
-            cardBody.innerHTML = `
-              <strong>Exercise:</strong> ${sessionData.exerciseName || "N/A"}<br>
-              <strong>Sets:</strong> ${sessionData.sessionSets || "N/A"}<br>
-              <strong>Reps:</strong> ${sessionData.sessionReps || "N/A"}<br>
-              <strong>Duration:</strong> ${sessionData.sessionDuration || "N/A"} minutes<br>
-              ${sessionData.eventName ? `<strong>Event:</strong> ${sessionData.eventName}<br>` : ""}
-            `;
+              const cardBody = document.createElement("div");
+              cardBody.className = "card-body";
+              cardBody.innerHTML = `
+                ${sessionData.exerciseDetails}<br>
+                ${sessionData.eventName ? `<strong>Event:</strong> ${sessionData.eventName}<br>` : ""}
+              `;
 
-            sessionCard.appendChild(cardBody);
-            pinnedContainer.appendChild(sessionCard);
+              sessionCard.appendChild(cardBody);
+              pinnedContainer.appendChild(sessionCard);
+            });
           });
         } else {
           pinnedContainer.innerHTML = `<p>No pinned sessions found.</p>`;
@@ -86,7 +114,11 @@ async function displayPinnedSessions() {
       pinnedContainer.innerHTML = `<p>You must be logged in to view your pinned sessions.</p>`;
     }
 
-    // Append the pinned container to the body
+    // Clear previous content and append the pinned container to the body
+    const existingContainer = document.querySelector(".container.mt-4");
+    if (existingContainer) {
+      existingContainer.remove();
+    }
     document.body.appendChild(pinnedContainer);
   });
 }

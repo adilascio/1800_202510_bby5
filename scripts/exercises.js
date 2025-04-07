@@ -12,38 +12,6 @@ import {
 // Initialize Firestore
 const db = getFirestore(app);
 
-// Display Exercises Dynamically
-async function displayExercisesDynamically(collectionName) {
-  let cardTemplate = document.getElementById("exercisesCardTemplate");
-
-  try {
-    // Get all documents from the collection
-    const querySnapshot = await getDocs(collection(db, collectionName));
-    let i = 1;
-
-    // Loop through each document in the collection
-    querySnapshot.forEach((doc) => {
-      const exercisesID = doc.id;
-      const { name, image } = doc.data();
-      let newCard = cardTemplate.content.cloneNode(true);
-
-      // Update card details
-      newCard.querySelector(".name").innerHTML = name;
-      newCard.querySelector(".image").src = image;
-      newCard.querySelector(".id").innerHTML = exercisesID;
-
-      // Append the new card to the correct card group
-      document.getElementById(collectionName + "CardGroup").appendChild(newCard);
-      i++;
-    });
-  } catch (error) {
-    console.error("Error displaying exercises: ", error);
-  }
-}
-
-// Call the function to display exercises dynamically
-displayExercisesDynamically("exercises");
-
 // Write Exercises to Firestore
 async function writeExercises() {
   try {

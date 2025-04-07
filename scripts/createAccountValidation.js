@@ -56,7 +56,8 @@ async function registerUser(first, last, date, email, password, username) {
             lastName: last,
             birthDate: date,
             email: email,
-            username: username
+            username: username,
+            uid: user.uid
         });
 
         alert("Account successfully created!");

@@ -98,7 +98,7 @@
             Create a Session! Log your gym workout and track your progress with a personalized session, and push yourself to new limits. Stay consistent, challenge yourself, and celebrate every win along the way!
           </p>
           <div class="d-inline-flex gap-2 mb-5">
-            <button class="d-inline-flex align-items-center btn btn-primary btn-lg px-4 rounded-pill" type="button" href="./createPost.html">
+            <button onclick="toSession()" class="d-inline-flex align-items-center btn btn-primary btn-lg px-4 rounded-pill" type="button" href="./CreateSession.html">
               Create Session.
               <a href="CreateSession.html"><svg class="bi ms-2" width="50" height="35"><use xlink:href="#arrow-right-short"></use></svg></a>
             </button>
@@ -120,17 +120,18 @@
             <p class="col-lg-8 mx-auto fs-5 text-muted">
               Create a Event! Set up a competitive challenge to push yourself and others toward personal growth. Track progress, compete with friends, and celebrate achievements together!
             <div class="d-inline-flex gap-2 mb-5">
-              <button class="d-inline-flex align-items-center btn btn-primary btn-lg px-4 rounded-pill" type="button">
+              <button onclick="toEvent()" class="d-inline-flex align-items-center btn btn-primary btn-lg px-4 rounded-pill" type="button">
                 Create an Event.
                 <svg class="bi ms-2" width="50" height="35"><use xlink:href="#arrow-right-short"></use></svg>
               </button>
-              <button class="btn btn-outline-secondary btn-lg px-4 rounded-pill" type="button">
+              <button onclick="toEvent()"  class="btn btn-outline-secondary btn-lg px-4 rounded-pill" type="button">
                 More info...
               </button>
             </div>
           </div>
         </div>
 
+      <footer id="footerPlaceHolder"></footer> 
       <!-- <script src="/docs/5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script> -->
       <script src="scripts/skeleton.js"></script>
       <script type="module" src="scripts/createNew.js"></script>

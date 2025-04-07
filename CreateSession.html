@@ -32,82 +32,83 @@
 
     <div class="container my-5">
       <div class="p-5 text-center bg-body-tertiary rounded-3">
-        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-journals" viewBox="0 0 16 16">
-          <path d="M5 0h8a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2 2 0 0 1-2 2H3a2 2 0 0 1-2-2h1a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1H1a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v9a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1H3a2 2 0 0 1 2-2"></path>
-          <path d="M1 6v-.5a.5.5 0 0 1 1 0V6h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 3v-.5a.5.5 0 0 1 1 0V9h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 2.5v.5H.5a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1H2v-.5a.5.5 0 0 0-1 0"></path>
-        </svg>
-        <h1 class="text-body-emphasis">Create a Session</h1>
+        <div id="createSessionContainer">
+          <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-journals" viewBox="0 0 16 16">
+            <path d="M5 0h8a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2 2 0 0 1-2 2H3a2 2 0 0 1-2-2h1a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1H1a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v9a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1H3a2 2 0 0 1 2-2"></path>
+            <path d="M1 6v-.5a.5.5 0 0 1 1 0V6h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 3v-.5a.5.5 0 0 1 1 0V9h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 2.5v.5H.5a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1H2v-.5a.5.5 0 0 0-1 0"></path>
+          </svg>
+          <h1 class="text-body-emphasis">Create a Session</h1>
           <form style="padding-top: 55pt; padding-left: 10%; padding-right: 10%;" onsubmit="event.preventDefault(); writeSession();">
-        <div class="row mb-3">
-          <label for="inputdate" class="col-sm-2 col-form-label">Date</label>
-          <div class="col-sm-10">
-            <input type="date" class="form-control" id="inputdate">
-          </div>
-        </div>
-        <div class="row mb-3">
-          <label for="inputetime" class="col-sm-2 col-form-label">Duration (mins)</label>
-          <div class="col-sm-10">
-            <input type="number" class="form-control" id="inputetime">
-          </div>
-        </div>
-        <div id="exerciseContainer">
-          <div class="exercise-group">
-            <div class="dropdown mb-3">
-              <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                Select exercise
+            <div class="row mb-3">
+              <label for="inputdate" class="col-sm-2 col-form-label">Date</label>
+              <div class="col-sm-10">
+                <input type="date" class="form-control" id="inputdate">
+              </div>
+            </div>
+            <div class="row mb-3">
+              <label for="inputetime" class="col-sm-2 col-form-label">Duration (mins)</label>
+              <div class="col-sm-10">
+                <input type="number" class="form-control" id="inputetime">
+              </div>
+            </div>
+            <div id="exerciseContainer">
+              <div class="exercise-group">
+                <div class="dropdown mb-3">
+                  <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Select exercise
+                  </button>
+                  <ul class="dropdown-menu exerciseDropdown">
+                    <!-- Exercise names will be dynamically inserted here -->
+                  </ul>
+                </div>
+                <div class="row mb-3">
+                  <label for="selectedExercise" class="col-sm-2 col-form-label">Selected Exercise</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control selectedExercise" readonly>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <label for="inputsets" class="col-sm-2 col-form-label">Sets</label>
+                  <div class="col-sm-10">
+                    <input type="number" class="form-control inputsets">
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <label for="inputreps" class="col-sm-2 col-form-label">Reps</label>
+                  <div class="col-sm-10">
+                    <input type="number" class="form-control inputreps">
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <label for="inputweight" class="col-sm-2 col-form-label">Weight (lbs)</label>
+                  <div class="col-sm-10">
+                    <input type="number" class="form-control inputweight">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <button type="button" class="btn btn-success mb-3" id="addExerciseButton">Add Another Exercise</button>
+            <div class="dropdown">
+              <input type="checkbox" id="myCheckbox">
+              <label for="myCheckbox">Event submission</label>
+              <br><br>
+              <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="true">
+                Select event
               </button>
-              <ul class="dropdown-menu exerciseDropdown">
-                <!-- Exercise names will be dynamically inserted here -->
+              <ul class="dropdown-menu" id="eventDropdown">
+                <!-- Event names will be dynamically inserted here -->
               </ul>
+              <br><br>
             </div>
             <div class="row mb-3">
-              <label for="selectedExercise" class="col-sm-2 col-form-label">Selected Exercise</label>
+              <label for="selectedEvent" class="col-sm-2 col-form-label">Selected Event</label>
               <div class="col-sm-10">
-                <input type="text" class="form-control selectedExercise" readonly>
+                <input type="text" class="form-control" id="selectedEvent" readonly>
               </div>
             </div>
-            <div class="row mb-3">
-              <label for="inputsets" class="col-sm-2 col-form-label">Sets</label>
-              <div class="col-sm-10">
-                <input type="number" class="form-control inputsets">
-              </div>
-            </div>
-            <div class="row mb-3">
-              <label for="inputreps" class="col-sm-2 col-form-label">Reps</label>
-              <div class="col-sm-10">
-                <input type="number" class="form-control inputreps">
-              </div>
-            </div>
-            <div class="row mb-3">
-              <label for="inputweight" class="col-sm-2 col-form-label">Weight (lbs)</label>
-              <div class="col-sm-10">
-                <input type="number" class="form-control inputweight">
-              </div>
-            </div>
-          </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </form>
         </div>
-        <button type="button" class="btn btn-success mb-3" id="addExerciseButton">Add Another Exercise</button>
-        <div class="dropdown">
-          <input type="checkbox" id="myCheckbox">
-          <label for="myCheckbox">Event submission</label>
-          <br><br>
-          <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="true">
-            Select event
-          </button>
-          <ul class="dropdown-menu" id="eventDropdown">
-            <!-- Event names will be dynamically inserted here -->
-          </ul>
-          <br><br>
-        </div>
-        <div class="row mb-3">
-          <label for="selectedEvent" class="col-sm-2 col-form-label">Selected Event</label>
-          <div class="col-sm-10">
-            <input type="text" class="form-control" id="selectedEvent" readonly>
-          </div>
-        </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
-      </form>
-      </div>
       </div>
     </div>
 

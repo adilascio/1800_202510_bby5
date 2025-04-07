@@ -1,7 +1,7 @@
 // Firebase SDK imports
 import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
 import { getFirestore, collection, query, where, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
-import app from authentication.js;
+import { app } from "./firebaseAPI_TEAM99.js";
 
 const auth = getAuth(app);
 const db = getFirestore(app);

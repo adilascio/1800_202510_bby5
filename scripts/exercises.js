@@ -12,7 +12,6 @@ import {
 // Initialize Firestore
 const db = getFirestore(app);
 
-
 // Write Exercises to Firestore
 async function writeExercises() {
   try {

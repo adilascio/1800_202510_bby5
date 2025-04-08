@@ -1,14 +1,34 @@
 <nav class="navbar navbar-expand-lg bg-primary-subtle fixed-top">
     <div class="container-fluid d-flex justify-content-center align-items-center">
-        <a class="navbar-brand" href="./main.html">
+        <style>
+            @media only screen and (max-width: 600px) {
+                #logo {
+                    display: none;
+                }
+                #nav {
+                    margin-left: 0px;
+                }
+            
+            } 
+            @media only screen and (min-width: 601px) {
+                #logo {
+                    display: block;
+                }
+                #nav {
+                    margin-left: -125px;
+                }
+            }
+            
+        </style>
+        <a class="navbar-brand" href="./main.html" id="logo">
             <img src="./images/logo.png" style="border-radius: 40%"; alt="logo" width="24" height="24"> GymPal
         </a>
-        <ul class="navbar-nav d-flex flex-row w-100 justify-content-center gap-5">
+        <ul class="navbar-nav d-flex flex-row w-100 justify-content-center gap-5"id="nav">
             <li class="nav-item">
                 <a class="nav-link" href="settings.html">Settings</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link active" style="margin-left: -10px;" aria-current="page" href="./main.html">Home</a>
+                <a class="nav-link active" aria-current="page" href="./main.html">Home</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="profile.html">Profile</a>

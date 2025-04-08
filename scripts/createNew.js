@@ -158,3 +158,69 @@ document.addEventListener("DOMContentLoaded", () => {
     button.addEventListener("click", toEvent);
   });
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+  const addExerciseButton = document.getElementById("addExerciseButton");
+  const exerciseContainer = document.getElementById("exerciseContainer");
+
+  if (addExerciseButton) {
+    addExerciseButton.addEventListener("click", async () => {
+      const exerciseGroup = document.createElement("div");
+      exerciseGroup.className = "exercise-group";
+
+      exerciseGroup.innerHTML = `
+        <div class="dropdown mb-3">
+          <button class="btn btn-secondary dropdown-toggle select-exercise-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Select exercise
+          </button>
+          <ul class="dropdown-menu exerciseDropdown">
+            <!-- Exercise names will be dynamically inserted here -->
+          </ul>
+        </div>
+        <div class="row mb-3">
+          <label for="selectedExercise" class="col-sm-2 col-form-label">Selected Exercise</label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control selectedExercise" readonly>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <label for="inputsets" class="col-sm-2 col-form-label">Sets</label>
+          <div class="col-sm-10">
+            <input type="number" class="form-control inputsets">
+          </div>
+        </div>
+        <div class="row mb-3">
+          <label for="inputreps" class="col-sm-2 col-form-label">Reps</label>
+          <div class="col-sm-10">
+            <input type="number" class="form-control inputreps">
+          </div>
+        </div>
+        <div class="row mb-3">
+          <label for="inputweight" class="col-sm-2 col-form-label">Weight (lbs)</label>
+          <div class="col-sm-10">
+            <input type="number" class="form-control inputweight">
+          </div>
+        </div>
+      `;
+
+      exerciseContainer.appendChild(exerciseGroup);
+
+      // Populate the dropdown with exercise names
+      const dropdownMenu = exerciseGroup.querySelector(".exerciseDropdown");
+      const exercisesRef = collection(db, "exercises");
+      const querySnapshot = await getDocs(exercisesRef);
+
+      querySnapshot.forEach((doc) => {
+        const exerciseName = doc.data().name;
+        const listItem = document.createElement("li");
+        listItem.innerHTML = `<a class="dropdown-item" href="#">${exerciseName}</a>`;
+        listItem.addEventListener("click", (event) => {
+          event.preventDefault();
+          const selectedExerciseInput = exerciseGroup.querySelector(".selectedExercise");
+          selectedExerciseInput.value = exerciseName;
+        });
+        dropdownMenu.appendChild(listItem);
+      });
+    });
+  }
+});

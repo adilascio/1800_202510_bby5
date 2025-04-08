@@ -4,13 +4,6 @@ import {app} from "./firebaseAPI_TEAM99.js";
 
 const auth = getAuth(app);
 
-// Ensure DOM is fully loaded before accessing elements
-document.addEventListener("DOMContentLoaded", () => {
-  const someElement = document.getElementById("someElementId");
-  if (!someElement) {
-    console.error("Element with ID 'someElementId' not found.");
-    return;
-  }
 
   // Add event listener to the login form
   document.getElementById("login-form").addEventListener("submit", function(event) {
@@ -25,4 +18,3 @@ document.addEventListener("DOMContentLoaded", () => {
               window.location.href = "./main.html"; // Redirect to main page
           });
   });
-});

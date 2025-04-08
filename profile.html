@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta charset = "utf-8">
+        <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <!-- Link to Bootstrap -->
@@ -11,21 +11,35 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/4.8.1/firebase-ui-auth.css" />
         <link type="text/css" rel="stylesheet" href="./styles/profile.css">
+        <link rel="stylesheet" href="./styles/style.css">
+        <link rel="icon" href="./favicon.ico" type="image/x-icon">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     </head>
 
     <body class="bg-body-primary">
         <header>
           <nav id="navBarPlaceholder"></nav>
         </header>
-        <!--Rest of content goes here-->
-        <div id="userInfoCard" class="card">
-          <div id="accountInfo" class="card-body">
-            <h2>Welcome back <span id="fullName"></span></h2>
-            <h4 id="userName"></h4>
-            <p id="dateOfBirth"></p>
-
-          </div>
-        </div>
+        <!-- Main container for the profile sessions -->
+        <main>
+          <div class="container my-5">
+              <div class="p-5 text-center bg-body-tertiary rounded-3">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-journals" viewBox="0 0 16 16">
+                      <path d="M5 0h8a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2 2 2 0 0 1-2 2H3a2 2 0 0 1-2-2h1a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1H1a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v9a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1H3a2 2 0 0 1 2-2"/>
+                      <path d="M1 6v-.5a.5.5 0 0 1 1 0V6h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 3v-.5a.5.5 0 0 1 1 0V9h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 2.5v.5H.5a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1H2v-.5a.5.5 0 0 0-1 0"/>
+                    </svg>
+                <h1 class="text-body-emphasis">Pinned Sessions</h1>
+                <div class="overflow" style="overflow-y: scroll; height: 500px; width: 100%;">
+                  <p class="col-lg-8 mx-auto fs-5 text-muted">
+                    View your sessions! Track your progress and see how far you've come. Stay motivated, stay focused, and keep pushing yourself to new heights!
+                  <!-- Session cards will be dynamically inserted here -->
+                  <div id="pinnedSessionsContainer">
+                    <!-- ...existing session cards... -->
+                  </div>
+                </div>
+              </div>
+            </div>
+      </main>
         <footer id="footerPlaceHolder"></footer> 
         <script type="module" src="scripts/profile.js"></script>
         <script src="scripts/skeleton.js"></script>

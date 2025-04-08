@@ -19,7 +19,7 @@
 
     <!-- Main container for the events leaderboard -->
     <main>
-      <div class="container my-5 d-flex flex-column justify-content-between" style="min-height: 100vh;">
+      <div class="container my-5 d-flex flex-column justify-content-between" style="min-height: 100vh; padding-left: 5%;">
         <div class="p-5 text-center bg-body-tertiary rounded-3">
           <!-- SVG icon representing a trophy (for the leaderboard) -->
           <svg xmlns="http://www.w3.org/2000/svg" width= "60" height="60" fill="currentColor" class="bi bi-trophy" viewBox="0 0 16 16">
@@ -33,11 +33,14 @@
             Check out your events leaderboard! Track your performance, view rankings, and see how you compare.
           </p>
         </div>
-        <div class="overflow mt-auto" style="overflow-y: scroll; height: 400px; width: 100%;">
+        <div class="overflow mt-auto" style="overflow-y: scroll; height: 400px; width: 100%; padding-left: 15px;">
           <!-- Event cards will be dynamically inserted here -->
           <div id="leaderboardContainer" class="row">
             <!-- ...existing event cards... -->
           </div>
+        </div>
+        <div id="pinnedSessionsContainer" class="container mt-4">
+          <!-- Pinned sessions will be dynamically inserted here -->
         </div>
       </div>
     </main>
@@ -47,5 +50,6 @@
     <script src="scripts/skeleton.js"></script>
     <!-- This script should contain the logic to retrieve and display events -->
     <script type="module" src="scripts/leaderboard.js"></script>
+    <script type="module" src="scripts/profile.js"></script>
   </body>
 </html>

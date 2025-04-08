@@ -19,7 +19,7 @@
 
     <!-- Main container for the events leaderboard -->
     <main>
-      <div class="container my-5">
+      <div class="container my-5 d-flex flex-column justify-content-between" style="min-height: 100vh;">
         <div class="p-5 text-center bg-body-tertiary rounded-3">
           <!-- SVG icon representing a trophy (for the leaderboard) -->
           <svg xmlns="http://www.w3.org/2000/svg" width= "60" height="60" fill="currentColor" class="bi bi-trophy" viewBox="0 0 16 16">
@@ -29,14 +29,14 @@
             <path d="M7 11h2a3 3 0 0 0 3-3V7H4v1a3 3 0 0 0 3 3z"/>
           </svg>
           <h1 class="text-body-emphasis">Your Events Leaderboard</h1>
-          <div class="overflow" style="overflow-y: scroll; height: 400px; width: 100%;">
-            <p class="col-lg-8 mx-auto fs-5 text-muted">
-              Check out your events leaderboard! Track your performance, view rankings, and see how you compare.
-            </p>
-            <!-- Event cards will be dynamically inserted here -->
-            <div id="leaderboardContainer">
-              <!-- ...existing event cards... -->
-            </div>
+          <p class="col-lg-8 mx-auto fs-5 text-muted">
+            Check out your events leaderboard! Track your performance, view rankings, and see how you compare.
+          </p>
+        </div>
+        <div class="overflow mt-auto" style="overflow-y: scroll; height: 400px; width: 100%;">
+          <!-- Event cards will be dynamically inserted here -->
+          <div id="leaderboardContainer" class="row">
+            <!-- ...existing event cards... -->
           </div>
         </div>
       </div>

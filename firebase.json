@@ -10,8 +10,11 @@
       "**/.*",
       "**/node_modules/**"
     ]
+<<<<<<< HEAD
   },
   "storage": {
     "rules": "storage.rules"
+=======
+>>>>>>> ff33697e0629341b87f942f740debf49b1c658d9
   }
 }

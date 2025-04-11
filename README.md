@@ -1,59 +1,44 @@
-
-# Project Name
+# GymPal
 
 ## Overview
-Summarize your project's purpose, problem solved, key features, user benefits, development context, and main technologies used.
+GymPal is a community-driven web application designed to help gym-goers overcome isolation and stay consistent with their workouts. It connects users through workout logging, event creation, and progress tracking features that encourage social interaction and friendly competition. Developed as a course project for Comp 1800, GymPal utilizes modern web technologies including Firebase, HTML, CSS, JavaScript, and Bootstrap to deliver a seamless, intuitive user experience. The app helps users track their fitness progress, connect with peers, and visualize workout achievements through dynamic profile boards and real-time event updates.
 
-Example:
-
-This client-side JavaScript web application provides real-time weather updates for cities worldwide. It simplifies accessing weather information through an intuitive mobile-first interface, allowing users to input a city name and receive data on temperature, humidity, and conditions.
-
-Developed for the [Course Name] course, applying User-Centred Design practices, agile project management processes, integrating a weather API, and Firebase backend services.
+Developed for the Comp 1800 course, GymPal emphasizes user engagement through intuitive design and community-focused features.
 
 ---
 
 ## Features
 
-Example:
-- Real-time weather updates for any city.
-- Responsive design for desktop and mobile.
-- Displays temperature, humidity, and weather conditions.
+- **Workout Tracking**: Automatically log and view your workout sessions.
+- **Community Events**: Create and join events to compete against friends.
+- **Profile Display**: Showcase your achievements on your personal profile board.
 
 ---
 
 ## Technologies Used
 
-Example:
-- **Frontend**: HTML, CSS, JavaScript
-- **Backend**: Firebase for hosting
-- **Database**: Firestore
-- **API**: OpenWeatherMap API
+- **Frontend**: HTML, CSS, JavaScript, Bootstrap
+- **Backend**: Firebase (for hosting, data storage, and user authentication)
+- **Design & Collaboration**: Figma, Trello, Discord, 
 
 ---
 
 ## Usage
 
-Example:
-1. Open your browser and visit `http://localhost:3000`.
-2. Enter the name of the city in the search bar and press enter.
-3. View the weather information displayed on the screen.
+1. Open your browser and visit the GymPal application URL (e.g., `http://localhost:3000`).
+2. Register a new account or log in with your existing credentials.
+3. Log your workout sessions using the intuitive interface to track your progress.
+4. Create or join community events to motivate and engage with others.
+5. View your personalized profile page to monitor your progress and achievements.
 
 ---
 
 ## Project Structure
 
-Example:
-```
-project-name/
-├── src/
-│   ├── index.html
-│   ├── style.css
-│   ├── app.js
-│   └── components/
-├── package.json
-├── README.md
-└── .gitignore
-```
+GymPal/ ├── src/ │ ├── index.html │ ├── styles.css │ ├── app.js │ └── components/ │ ├── progressPage.js │
+ ├── eventPage.js │ └── profilePage.js ├── firebase.json ├── package.json ├── README.md └── .gitignore
+
+This is our project structure, outlining the main files and folders used in GymPal.
 
 ---
 
@@ -66,32 +51,26 @@ project-name/
 
 ## Acknowledgments
 
-Example:
-- Weather data sourced from [OpenWeatherMap](https://openweathermap.org/).
-- Code snippets for ___ algoirthm were adapted from resources such as [Stack Overflow](https://stackoverflow.com/) and [MDN Web Docs](https://developer.mozilla.org/).
-- Icons sourced from [FontAwesome](https://fontawesome.com/) and images from [Unsplash](https://unsplash.com/).
+- Firebase for providing robust cloud services (data storage, hosting, and user authentication).
+- Figma, Trello, Discord, and physical white-boards for facilitating our design brainstorming and project management.
+- Our course instructor, Carly, for invaluable feedback and technical guidance.
 
 ---
 
 ## Limitations and Future Work
 ### Limitations
 
-Example:
-- Currently, the app only supports city-based weather searches.
-- Limited to basic weather parameters like temperature, humidity, and conditions.
-- The user interface can be further enhanced for accessibility.
+- The current MVP focuses on core features like workout logging and event creation; some social features (e.g., home feed, followers/following system) remain unimplemented.
+- Certain UI elements, particularly on event and home pages, are in early stages and could benefit from further refinement.
 
 ### Future Work
 
-Example: 
-- Add support for location-based weather detection using GPS.
-- Implement additional weather parameters like wind speed and UV index.
-- Create a dark mode for better usability in low-light conditions.
-- Integrate user accounts for saving favorite locations.
+- **Enhanced Social Features**: Implement a home feed and follower system to deepen community interactions.
+- **Expanded Analytics**: Introduce additional metrics and visualizations to better track fitness progress.
+- **UI/UX Improvements**: Continue refining the user interface for enhanced usability and accessibility, including potential dark mode support.
 
 ---
 
 ## License
 
-Example:
 This project is licensed under the MIT License. See the LICENSE file for details.
